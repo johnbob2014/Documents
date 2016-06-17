@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TestBedViewController.h
 //  Documents-C11
 //
 //  Created by BobZhang on 16/6/17.
@@ -8,8 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
-
+@interface TBVC_01_UTI_Utilities : UIViewController
 @end
-
