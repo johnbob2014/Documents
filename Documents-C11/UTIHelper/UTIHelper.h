@@ -30,4 +30,6 @@
 
 + (BOOL)pathPointsTo:(NSString *)path likelyUTIMatch:(CFStringRef)theUTI;
 
++ (NSString *) mimeForExtension:(NSString *)ext;
+
 @end

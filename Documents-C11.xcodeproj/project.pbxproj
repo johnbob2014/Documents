@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E8084AC1D154D32008C06E3 /* ApacheMIMETypes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8084AB1D154D32008C06E3 /* ApacheMIMETypes.txt */; };
+		1E8084B01D15516D008C06E3 /* DocumentWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8084AF1D15516D008C06E3 /* DocumentWatcher.m */; };
 		4B1B88DC1D13974900EBF5A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1B88DB1D13974900EBF5A8 /* Assets.xcassets */; };
 		4B1B88DF1D13974900EBF5A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B1B88DD1D13974900EBF5A8 /* LaunchScreen.storyboard */; };
 		4B1B88EB1D13979900EBF5A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1B88E61D13979900EBF5A8 /* main.m */; };
@@ -16,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E8084AB1D154D32008C06E3 /* ApacheMIMETypes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ApacheMIMETypes.txt; sourceTree = "<group>"; };
+		1E8084AE1D15516D008C06E3 /* DocumentWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentWatcher.h; path = DocumentWatcher/DocumentWatcher.h; sourceTree = "<group>"; };
+		1E8084AF1D15516D008C06E3 /* DocumentWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentWatcher.m; path = DocumentWatcher/DocumentWatcher.m; sourceTree = "<group>"; };
 		4B1B88CC1D13974900EBF5A8 /* Documents-C11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Documents-C11.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1B88DB1D13974900EBF5A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B1B88DE1D13974900EBF5A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,6 +46,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E8084AD1D15513A008C06E3 /* DocumentWatcher */ = {
+			isa = PBXGroup;
+			children = (
+				1E8084AE1D15516D008C06E3 /* DocumentWatcher.h */,
+				1E8084AF1D15516D008C06E3 /* DocumentWatcher.m */,
+			);
+			name = DocumentWatcher;
+			sourceTree = "<group>";
+		};
 		4B1B88C31D13974900EBF5A8 = {
 			isa = PBXGroup;
 			children = (
@@ -60,6 +74,7 @@
 		4B1B88CE1D13974900EBF5A8 /* Documents-C11 */ = {
 			isa = PBXGroup;
 			children = (
+				1E8084AD1D15513A008C06E3 /* DocumentWatcher */,
 				4B1B88F01D139D9200EBF5A8 /* UTIHelper */,
 				4B1B88E71D13979900EBF5A8 /* UIView+AutoLayout */,
 				4B1B88E61D13979900EBF5A8 /* main.m */,
@@ -87,6 +102,7 @@
 			children = (
 				4B1B88F11D139E5D00EBF5A8 /* UTIHelper.h */,
 				4B1B88F21D139E5D00EBF5A8 /* UTIHelper.m */,
+				1E8084AB1D154D32008C06E3 /* ApacheMIMETypes.txt */,
 			);
 			name = UTIHelper;
 			sourceTree = "<group>";
@@ -122,6 +138,7 @@
 				TargetAttributes = {
 					4B1B88CB1D13974900EBF5A8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = RDB8YPHM72;
 					};
 				};
 			};
@@ -148,6 +165,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E8084AC1D154D32008C06E3 /* ApacheMIMETypes.txt in Resources */,
 				4B1B88DF1D13974900EBF5A8 /* LaunchScreen.storyboard in Resources */,
 				4B1B88DC1D13974900EBF5A8 /* Assets.xcassets in Resources */,
 			);
@@ -161,6 +179,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B1B88F31D139E5D00EBF5A8 /* UTIHelper.m in Sources */,
+				1E8084B01D15516D008C06E3 /* DocumentWatcher.m in Sources */,
 				4B1B88EB1D13979900EBF5A8 /* main.m in Sources */,
 				4B1B88EC1D13979900EBF5A8 /* UIView+AutoLayout.m in Sources */,
 				4B1B88EF1D1397F200EBF5A8 /* TestBedViewController.m in Sources */,
@@ -269,7 +288,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Documents-C11/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ZhangBaoGuo.Documents-C11";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -280,7 +301,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Documents-C11/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ZhangBaoGuo.Documents-C11";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -306,6 +329,7 @@
 				4B1B88E51D13974900EBF5A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

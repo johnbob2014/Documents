@@ -31,7 +31,7 @@
     [self.view addSubview:textView];
     [textView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
     
-    textView.font = [UIFont fontWithName:@"Futura" size:18.0f];
+    textView.font = [UIFont fontWithName:@"Futura" size:10.0f];
     textView.editable = NO;
 }
 
@@ -39,23 +39,23 @@
 {
     int count = 0;  // total
     int count1 = 0; // preferred MIME types
-    //int count2 = 0; // Apache
+    int count2 = 0; // Apache
     
     for (NSString *ext in VARIOUS_EXTENSIONS)
     {
         NSString *uti = [UTIHelper preferredUTIForExtension:ext];
         NSString *mime1 = [UTIHelper preferredMimeTypeForUTI:uti];
-        //NSString *mime2 = mimeForExtension(ext); // Using Apache
-        [self doLog:@"%@: %@ [%@]", ext, uti, mime1];
+        NSString *mime2 = [UTIHelper mimeForExtension:ext]; // Using Apache
+        [self doLog:@"%@ - [UTI]:%@ [MIME]:%@ %@", ext, uti, mime1 ,mime2];
         //NSLog(@"%@: %@ [%@] [%@]", ext, uti, mime1, mime2);
         count++;
         if (mime1) count1++;
-        //if (mime2) count2++;
+        if (mime2) count2++;
     }
     
     [self doLog:@"Number of items: %d", count];
     [self doLog:@"Preferred MIME types: %d", count1];
-    //[self doLog:@"Apache: %d", count2];
+    [self doLog:@"Apache: %d", count2];
 }
 
 - (void)doLog:(NSString *)formatstring, ...
@@ -75,5 +75,62 @@
     [logMS appendString:@"\n"];
     textView.text = logMS;
 }
+
+@end
+
+#pragma mark - TBVC_03_Document_Monitoring
+
+#import "DocumentWatcher.h"
+
+@implementation TBVC_03_Document_Monitoring{
+    NSArray *itemArray;
+    DocumentWatcher *watcher;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self scanDocuments];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kDocumentChanged object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification)
+     {
+         // Contents changed
+         [self scanDocuments];
+     }];
+    
+    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    watcher = [DocumentWatcher documentWatcherForPath:path];
+}
+
+- (void)scanDocuments
+{
+    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    itemArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+    [self.tableView reloadData];
+}
+
+// Number of sections
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView
+{
+    return 1;
+}
+
+// Rows per section
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section
+{
+    return itemArray.count;
+}
+
+// Return a cell for the index path
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    cell.textLabel.text = [itemArray objectAtIndex:indexPath.row];
+    return cell;
+}
+
 
 @end

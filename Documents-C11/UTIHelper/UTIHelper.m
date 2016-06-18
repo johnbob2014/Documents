@@ -127,5 +127,58 @@
     return (UTTypeConformsTo((__bridge CFStringRef) preferredUTI, theUTI));
 }
 
+// mimeTypesDictionary 用于存放 extension : mimeType 键值对
+static NSDictionary *mimeTypesDictionary;
+
++ (void)initialMimeTypesDictionary{
+    NSError *error;
+    NSString *mimeFilePath = [[NSBundle mainBundle] pathForResource:@"ApacheMIMETypes" ofType:@"txt"];
+    NSString *mimeFileContent = [NSString stringWithContentsOfFile:mimeFilePath encoding:NSUTF8StringEncoding error:&error];
+    if (!mimeFileContent) {
+        NSLog(@"Could not read in mime type file : %@",error.localizedFailureReason);
+        return;
+    }
+    
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    NSArray *lineArray = [mimeFileContent componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    for (NSString *eachLine in lineArray) {
+        NSString *line = [eachLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        // 如果长度太小，放弃解析此行
+        if (line.length < 2) continue;
+        // 如果此行以 # 开头，放弃解析此行，比如：
+        // # application/1d-interleaved-parityfec
+        if ([line hasPrefix:@"#"]) continue;
+        
+        // 根据 Tab 字符拆分此行，比如：
+        // application/gpx+xml				gpx
+        NSArray *itemArray = [line componentsSeparatedByString:@"\t"];
+        // 如果数据不完整，放弃解析此行
+        if (itemArray.count < 2) continue;
+        
+        // 本行拥有完整数据，开始解析
+        // mimeType唯一，表示类型
+        NSString *mimeType = itemArray.firstObject;
+        // 一种mimeType可能包括多种extension，比如：
+        // application/inkml+xml				ink inkml
+        NSArray *extensionArray = [itemArray.lastObject componentsSeparatedByString:@" "];
+        for (NSString *extension in extensionArray) {
+            // 以extension为键、以mimeType为值存入字典
+            dic[extension] = mimeType;
+        }
+    }
+    
+    mimeTypesDictionary = dic;
+}
+
++ (NSString *)mimeForExtension:(NSString *)ext{
+    if (!mimeTypesDictionary) {
+        [UTIHelper initialMimeTypesDictionary];
+    }
+    
+    if (mimeTypesDictionary)
+        return mimeTypesDictionary[[ext lowercaseString]];
+    else
+        return nil;
+}
 
 @end

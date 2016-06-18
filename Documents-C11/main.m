@@ -6,8 +6,8 @@
 //  Copyright © 2016年 BobZhang. All rights reserved.
 //
 
-#define TBVC_01
-//#define TBVC_03
+//#define TBVC_01
+#define TBVC_03
 //#define TBVC_06
 //#define TBVC_07
 
@@ -31,7 +31,7 @@
 #endif
     
 #ifdef TBVC_03
-    TBVC_03_Record_Trim_Save_Play_Video *tbvc = [[TBVC_03_Record_Trim_Save_Play_Video alloc]init];
+    TBVC_03_Document_Monitoring *tbvc = [[TBVC_03_Document_Monitoring alloc]init];
 #endif
 
 #ifdef TBVC_06
