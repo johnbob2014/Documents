@@ -16,3 +16,9 @@
 
 @interface TBVC_04_UIActivityViewController : UIViewController
 @end
+
+@interface TBVC_05_QuickLook_QLPreviewController : UIViewController
+@end
+
+@interface TBVC_06_UIDocumentInteractionController : UIViewController
+@end

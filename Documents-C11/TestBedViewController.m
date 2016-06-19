@@ -240,3 +240,105 @@
     [self presentViewController:activityVC animated:YES completion:nil];
 }
 @end
+
+#pragma mark - TBVC_05_QuickLook_QLPreviewController
+
+@import QuickLook;
+
+@interface CustomQLPreviewItem : NSObject <QLPreviewItem>
+@property (nonatomic,strong) NSString *previewItemPath;
+@end
+
+@implementation CustomQLPreviewItem
+
+- (NSURL *)previewItemURL{
+    return [NSURL fileURLWithPath:self.previewItemPath];
+}
+
+- (NSString *)previewItemTitle{
+    return [self.previewItemPath lastPathComponent];
+}
+
+@end
+
+#define FILE_PATH   [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/PDFSample.pdf"]
+
+@interface TBVC_05_QuickLook_QLPreviewController ()<QLPreviewControllerDataSource>
+@end
+
+@implementation TBVC_05_QuickLook_QLPreviewController
+
+- (void)loadView{
+    self.view = [[UIView alloc] init];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.navigationItem.rightBarButtonItem = BARBUTTON(@"Push", @selector(push));
+    self.navigationItem.leftBarButtonItem = BARBUTTON(@"Present", @selector(present));
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:FILE_PATH]) [self createPDF];
+}
+
+- (void)push{
+    QLPreviewController *controller = [[QLPreviewController alloc] init];
+    controller.dataSource = self;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
+- (void)present{
+    QLPreviewController *controller = [[QLPreviewController alloc] init];
+    controller.dataSource = self;
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void)createPDF{
+    // Create a string
+    NSMutableParagraphStyle *mPS = [[NSMutableParagraphStyle alloc] init];
+    mPS.alignment = NSTextAlignmentCenter;
+    NSDictionary *attributesDic = @{ NSParagraphStyleAttributeName : mPS,
+                                     NSFontAttributeName : [UIFont fontWithName:@"Arial-BoldMT" size:36.0f],
+                                     NSForegroundColorAttributeName : [UIColor redColor]};
+    NSMutableAttributedString *mAS = [[NSMutableAttributedString alloc] initWithString:@"Qucik Look Demo" attributes:attributesDic];
+    
+    // Load an image
+    UIImage *image = [UIImage imageNamed:@"CoverArt"];
+    
+    // Create PDF
+    CGRect rect = CGRectMake(0, 0, 480, 600);
+    UIGraphicsBeginPDFContextToFile(FILE_PATH, rect, nil);
+    UIGraphicsBeginPDFPage();
+    [mAS drawInRect:CGRectMake(0, 30, 480, 50)];
+    [image drawAtPoint:CGPointMake(10, 80)];
+    UIGraphicsEndPDFContext();
+}
+
+#pragma mark QLPreviewControllerDataSource
+
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller{
+    return 2;
+}
+
+- (id<QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index{
+    CustomQLPreviewItem *item = [CustomQLPreviewItem new];
+    if ( index == 0) {
+        item.previewItemPath = FILE_PATH;
+    }else if ( index == 1){
+        item.previewItemPath = [[NSBundle mainBundle] pathForResource:@"爸爸QQ号 3147261707" ofType:@"txt"];
+    }
+    
+    return item;
+}
+@end
+
+#pragma mark - TBVC_06_UIDocumentInteractionController
+
+@interface TBVC_06_UIDocumentInteractionController () <UIDocumentInteractionControllerDelegate>
+@end
+
+@implementation TBVC_06_UIDocumentInteractionController{
+    UIDocumentInteractionController *demoDIC;
+    NSURL *fileURL;
+    BOOL canOpen;
+}
+
+
+@end

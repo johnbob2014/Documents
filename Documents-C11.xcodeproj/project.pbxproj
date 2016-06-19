@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1E8084AC1D154D32008C06E3 /* ApacheMIMETypes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8084AB1D154D32008C06E3 /* ApacheMIMETypes.txt */; };
 		1E8084B01D15516D008C06E3 /* DocumentWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8084AF1D15516D008C06E3 /* DocumentWatcher.m */; };
+		1EF51B041D16DCA200BFDF82 /* 爸爸QQ号 3147261707.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1EF51B031D16DCA200BFDF82 /* 爸爸QQ号 3147261707.txt */; };
 		4B1B88DC1D13974900EBF5A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1B88DB1D13974900EBF5A8 /* Assets.xcassets */; };
 		4B1B88DF1D13974900EBF5A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B1B88DD1D13974900EBF5A8 /* LaunchScreen.storyboard */; };
 		4B1B88EB1D13979900EBF5A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1B88E61D13979900EBF5A8 /* main.m */; };
@@ -21,6 +22,7 @@
 		1E8084AB1D154D32008C06E3 /* ApacheMIMETypes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ApacheMIMETypes.txt; sourceTree = "<group>"; };
 		1E8084AE1D15516D008C06E3 /* DocumentWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentWatcher.h; path = DocumentWatcher/DocumentWatcher.h; sourceTree = "<group>"; };
 		1E8084AF1D15516D008C06E3 /* DocumentWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentWatcher.m; path = DocumentWatcher/DocumentWatcher.m; sourceTree = "<group>"; };
+		1EF51B031D16DCA200BFDF82 /* 爸爸QQ号 3147261707.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "爸爸QQ号 3147261707.txt"; sourceTree = "<group>"; };
 		4B1B88CC1D13974900EBF5A8 /* Documents-C11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Documents-C11.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1B88DB1D13974900EBF5A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B1B88DE1D13974900EBF5A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				4B1B88DB1D13974900EBF5A8 /* Assets.xcassets */,
 				4B1B88DD1D13974900EBF5A8 /* LaunchScreen.storyboard */,
 				4B1B88E01D13974900EBF5A8 /* Info.plist */,
+				1EF51B031D16DCA200BFDF82 /* 爸爸QQ号 3147261707.txt */,
 			);
 			path = "Documents-C11";
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E8084AC1D154D32008C06E3 /* ApacheMIMETypes.txt in Resources */,
+				1EF51B041D16DCA200BFDF82 /* 爸爸QQ号 3147261707.txt in Resources */,
 				4B1B88DF1D13974900EBF5A8 /* LaunchScreen.storyboard in Resources */,
 				4B1B88DC1D13974900EBF5A8 /* Assets.xcassets in Resources */,
 			);

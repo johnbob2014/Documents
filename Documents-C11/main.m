@@ -8,8 +8,8 @@
 
 //#define TBVC_01
 //#define TBVC_03
-#define TBVC_04
-//#define TBVC_06
+//#define TBVC_04
+#define TBVC_05
 //#define TBVC_07
 
 #import <UIKit/UIKit.h>
@@ -39,8 +39,8 @@
     TBVC_04_UIActivityViewController *tbvc = [[TBVC_04_UIActivityViewController alloc]init];
 #endif
 
-#ifdef TBVC_06
-    TBVC_06_Edit_Video *tbvc = [[TBVC_06_Edit_Video alloc]init];
+#ifdef TBVC_05
+    TBVC_05_QuickLook_QLPreviewController *tbvc = [[TBVC_05_QuickLook_QLPreviewController alloc]init];
 #endif
     
 #ifdef TBVC_07
