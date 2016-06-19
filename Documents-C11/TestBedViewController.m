@@ -132,5 +132,111 @@
     return cell;
 }
 
+@end
 
+#pragma mark - TBVC_04_UIActivityViewController
+
+@interface CustomActivity : UIActivity
+@end
+
+@implementation CustomActivity
+
+- (NSString *)activityType{
+    return @"CustomActivityTypeListItemsAndTypes";
+}
+
+- (NSString *)activityTitle{
+    return @"CTP";
+}
+
+- (UIImage *)activityImage{
+    CGFloat targetSize = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 57 : 72;
+    CGFloat inset = targetSize * 0.15;
+    CGRect rect = CGRectMake(0, 0, targetSize, targetSize);
+    
+    UIGraphicsBeginImageContext(rect.size);
+    CGRect smallRect = CGRectInset(rect, inset, inset);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:10.0f];
+    [[UIColor blueColor] setStroke];
+    [path stroke];
+    
+    [@"CTP" drawInRect:smallRect withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Futura" size:30]}];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems{
+    return YES;
+}
+
+- (void)prepareWithActivityItems:(NSArray *)activityItems{
+    
+}
+
+- (UIViewController *)activityViewController{
+    UIViewController *customVC = [UIViewController new];
+    
+    customVC.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(okAction)];
+    
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:customVC];
+    nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    return nav;
+}
+
+- (void)okAction{
+    [self activityDidFinish:YES];
+}
+
+@end
+
+@interface TBVC_04_UIActivityViewController ()
+@end
+
+@implementation TBVC_04_UIActivityViewController{
+    UIActivityViewController *activityVC;
+    UISegmentedControl *seg;
+    UIImageView *imageView;
+}
+
+- (void)loadView{
+    self.view = [UIView new];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(action:)];
+    
+    seg = [[UISegmentedControl alloc] initWithItems:[@"System Custom" componentsSeparatedByString:@" "]];
+    seg.selectedSegmentIndex = 1;
+    self.navigationItem.titleView = seg;
+    
+    imageView = [UIImageView newAutoLayoutView];
+    imageView.image = [UIImage imageNamed:@"CoverArt"];
+    [self.view addSubview:imageView];
+    [imageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+}
+
+- (void)action:(id)sender{
+    switch (seg.selectedSegmentIndex) {
+        case 0:
+            [self systemActivity];
+            break;
+        case 1:
+            [self customActivity];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)systemActivity{
+    activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[imageView.image] applicationActivities:nil];
+    [self presentViewController:activityVC animated:YES completion:nil];
+}
+
+- (void)customActivity{
+    activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[imageView.image] applicationActivities:@[[CustomActivity new]]];
+    [self presentViewController:activityVC animated:YES completion:nil];
+}
 @end

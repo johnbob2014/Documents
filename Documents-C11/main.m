@@ -7,7 +7,8 @@
 //
 
 //#define TBVC_01
-#define TBVC_03
+//#define TBVC_03
+#define TBVC_04
 //#define TBVC_06
 //#define TBVC_07
 
@@ -32,6 +33,10 @@
     
 #ifdef TBVC_03
     TBVC_03_Document_Monitoring *tbvc = [[TBVC_03_Document_Monitoring alloc]init];
+#endif
+    
+#ifdef TBVC_04
+    TBVC_04_UIActivityViewController *tbvc = [[TBVC_04_UIActivityViewController alloc]init];
 #endif
 
 #ifdef TBVC_06
