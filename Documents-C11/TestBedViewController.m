@@ -340,5 +340,175 @@
     BOOL canOpen;
 }
 
+- (void)loadView{
+    self.view = [[UIView alloc] init];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem = BARBUTTON(@"Open in...", @selector(open:));
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(action:)];
+    
+    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/CustomImage.png"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        NSData *imageData = UIImagePNGRepresentation([UIImage imageNamed:@"CoverArt"]);
+        [imageData writeToFile:filePath atomically:YES];
+    }
+    fileURL = [NSURL fileURLWithPath:filePath];
+}
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    canOpen = [self canOpen:fileURL];
+    self.navigationItem.rightBarButtonItem.enabled = canOpen;
+}
+
+- (BOOL)canOpen:(NSURL *)aFileURL{
+    UIDocumentInteractionController *tmp = [UIDocumentInteractionController interactionControllerWithURL:aFileURL];
+    BOOL success = [tmp presentOpenInMenuFromRect:CGRectMake(0, 0, 100, 100) inView:self.view animated:NO];
+    [tmp dismissMenuAnimated:NO];
+    return success;
+}
+
+- (void)open:(UIBarButtonItem *)sender{
+    [self dismissIfNeeded];
+    demoDIC = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+    demoDIC.delegate = self;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [demoDIC presentOpenInMenuFromBarButtonItem:sender animated:YES];
+}
+
+- (void)action:(UIBarButtonItem *)sender{
+    [self dismissIfNeeded];
+    demoDIC = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+    demoDIC.delegate = self;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    [demoDIC presentOptionsMenuFromBarButtonItem:sender animated:YES];
+}
+
+- (void)dismissIfNeeded{
+    if (demoDIC) {
+        [demoDIC dismissMenuAnimated:YES];
+        self.navigationItem.rightBarButtonItem.enabled = canOpen;
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }
+}
+
+#pragma mark UIDocumentInteractionControllerDelegate
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller{
+    return self;
+}
+
+- (UIView *)documentInteractionControllerViewForPreview:(UIDocumentInteractionController *)controller{
+    return self.view;
+}
+
+- (CGRect)documentInteractionControllerRectForPreview:(UIDocumentInteractionController *)controller{
+    return self.view.frame;
+}
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller{
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    demoDIC = nil;
+}
+
+- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller{
+    self.navigationItem.rightBarButtonItem.enabled = canOpen;
+    demoDIC = nil;
+}
+@end
+
+#pragma mark - TBVC_07_Receive_Process_CustomType_Documents
+
+#define DOCUMENTS_PATH  [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+#define INBOX_PATH      [DOCUMENTS_PATH stringByAppendingPathComponent:@"Inbox"]
+
+@interface TBVC_07_Receive_Process_CustomType_Documents () <QLPreviewControllerDataSource>
+@end
+
+@implementation TBVC_07_Receive_Process_CustomType_Documents{
+    NSArray *docArray;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"generic"];
+    [self scanDocs];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    if (indexPath)
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)scanDocs
+{
+    docArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:DOCUMENTS_PATH error:nil];
+    [self.tableView reloadData];
+}
+
+#pragma mark UITableView DataSource & Delegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section
+{
+    return docArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"generic" forIndexPath:indexPath];
+    cell.textLabel.text = [docArray objectAtIndex:indexPath.row];
+    return cell;
+}
+
+// Support swipe-to-delete
+- (void)tableView:(UITableView *)aTableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row >= (NSInteger) docArray.count)
+    {
+        // Catch Bug Here
+        NSLog(@"System Inconsistency. Requested row %d", indexPath.row);
+        return;
+    }
+    
+    // Tried to avoid holding onto that cell -- didn't change the bug
+    NSString *title = [[[self tableView:self.tableView cellForRowAtIndexPath:indexPath] textLabel] text];
+    NSString *path = [DOCUMENTS_PATH stringByAppendingPathComponent:title];
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSError *error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error])
+            NSLog(@"Error deleting item %@: %@", path, error.localizedFailureReason);
+    }
+    
+    [self scanDocs];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    QLPreviewController *controller = [[QLPreviewController alloc] init];
+    controller.dataSource = self;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
+#pragma mark QLPreviewControllerDataSource
+
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller{
+    return 1;
+}
+
+- (id<QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index{
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    NSString *fileName = docArray[indexPath.row];
+    NSString *filePath = [DOCUMENTS_PATH stringByAppendingPathComponent:fileName];
+    return [NSURL fileURLWithPath:filePath];
+}
 @end

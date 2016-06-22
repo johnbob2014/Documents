@@ -22,3 +22,7 @@
 
 @interface TBVC_06_UIDocumentInteractionController : UIViewController
 @end
+
+@interface TBVC_07_Receive_Process_CustomType_Documents : UITableViewController
+- (void)scanDocs;
+@end

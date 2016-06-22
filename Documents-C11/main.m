@@ -9,12 +9,17 @@
 //#define TBVC_01
 //#define TBVC_03
 //#define TBVC_04
-#define TBVC_05
-//#define TBVC_07
+//#define TBVC_05
+//#define TBVC_06
+#define TBVC_07
 
 #import <UIKit/UIKit.h>
 #import "Utility.h"
 #import "TestBedViewController.h"
+
+#ifdef TBVC_07
+#import "InboxHelper.h"
+#endif
 
 @interface TestBedAppDelegate : UIResponder <UIApplicationDelegate>
 @property (strong,nonatomic) UIWindow *window;
@@ -43,8 +48,12 @@
     TBVC_05_QuickLook_QLPreviewController *tbvc = [[TBVC_05_QuickLook_QLPreviewController alloc]init];
 #endif
     
+#ifdef TBVC_06
+    TBVC_06_UIDocumentInteractionController *tbvc = [[TBVC_06_UIDocumentInteractionController alloc]init];
+#endif
+    
 #ifdef TBVC_07
-    TBVC_07_Email_Message_SocialPost *tbvc = [[TBVC_07_Email_Message_SocialPost alloc] init];
+    TBVC_07_Receive_Process_CustomType_Documents *tbvc = [[TBVC_07_Receive_Process_CustomType_Documents alloc] init];
 #endif
     
     tbvc.edgesForExtendedLayout = UIRectEdgeNone;
@@ -55,6 +64,13 @@
     return YES;
 }
 
+#ifdef TBVC_07
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    [InboxHelper checkAndProcessInbox];
+    TBVC_07_Receive_Process_CustomType_Documents *tbvc = (TBVC_07_Receive_Process_CustomType_Documents *) (((UINavigationController *)self.window.rootViewController).topViewController);
+    [tbvc scanDocs];
+}
+#endif
 @end
 
 int main(int argc, char * argv[]) {
